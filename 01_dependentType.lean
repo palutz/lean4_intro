@@ -44,12 +44,11 @@ def b2 : Bool := false
 #check Nat -- Type
 #check Nat → Nat → Bool -- Type
 -/
-
 def α : Type := Nat
 def β : Type := Bool
 def F : Type → Type := List 
 def G : Type → Type → Type := Prod
-/--/
+/-
 #check α     -- Type
 #check F α   -- Type, the same of: check F Nat
 #check G α β -- Type, the same of: check G Nat Bool
@@ -62,14 +61,14 @@ def G : Type → Type → Type := Prod
 /- polymorphic over type universe: eg. List -/
 #check List    /-  Type u_1 → Type u_1  List make sense for every type (u_1), no matter which "universe" is in.
     IMPORTANT: With List a, if a has Type n (universe of types n, also List n has the same universe Type n -/
--- define polymorphic
+-/
+/- *** define Polymorphic *** -/
 def F1.{u} (α: Type u) : Type u := Prod α α
-#check F1   -- Type u -> Type u
+-- #check F1   -- Type u -> Type u
 -- or explicitly define the universe
 universe u 
 def F1b(α : Type u) : Type u  := Prod α α
-#check F1b  -- Type u -> Type u
--/
+-- #check F1b  -- Type u -> Type u
 /- *** FUNCTIONS *** -/
 /- 
 #check fun x : Nat => x + 10
@@ -82,11 +81,11 @@ def F1b(α : Type u) : Type u  := Prod α α
 -- lambda abstraction and composability 
 def myId (x: Nat) : Nat := x  -- identity function: Nat → Nat
 def atrue (x: Nat) := true    -- always true      : Nat → Bool
-#check λ x => atrue (myId x)  -- infered: Nat → Bool 
+-- #check λ x => atrue (myId x)  -- infered: Nat → Bool 
 -- pass functions as parameters
-#check λ (g: String → Bool)(f: Nat → String)(x : Nat) => g (f x)
--- types as parameters
-#check λ (α β γ : Type)(g: β → γ)(f: α → β)(x: α) => g (f x)
+#check λ (g: String → Bool)(f: Nat → String)(x : Nat) => g (f x)  -- fun g f x => g (f x) : (String → Bool) → (Nat → String) → Nat → Bool
+/- *** Types as parameters *** -/
+#check λ (α β γ : Type)(g: β → γ)(f: α → β)(x: α) => g (f x) -- fun α β γ g f x => g (f x) : (α β γ : Type) → (β → γ) → (α → β) → α → γ
 #eval (λ (α β γ : Type)(g: β → γ)(f: α → β)(x: α) => g (f x)) Nat String Bool 
           (λ (s: String) => s.length > 0) (λ (n: Nat) => toString n) 1   -- Bool = true
 /- *** local definition *** -/ 
@@ -101,14 +100,39 @@ And also this 2nd case doesn't work...
 def bar := (fun a => fun (x: a) => x + 2)
 -/
 /- ***  Variables and sections  *** -/
-def doTwice (α : Type)(f: α -> α)(x : α) := f (f x)
--- or 
-variable (α : Type)
-def doTwice'(f: α → α)(x : α) := f (f x)
-variable (α β γ : Type)
-def compose'(g: β → γ)(f: α → β)(x : α) := g (f x)
-variable (g: β → γ) (f: α → β)
-variable (x : α)
-def compose := g (f x)
+section xyz
+  variable (α : Type)
+  variable (α β γ : Type)
+  variable (g: β → γ) (f: α → β)
+  variable (x : α)
 
-#print compose
+  def doTwice(f: α → α)(x : α) := f (f x)
+  def compose'(g: β → γ)(f: α → β)(x : α) := g (f x)
+  def compose := g (f x)
+/-
+#print compose   -- can't reference it outside of the section
+def compose : (α β γ : Type) → (β → γ) → (α → β) → α → γ :=
+fun α β γ g f x => g (f x)
+-/
+end xyz
+/- *** Namespae *** -/
+namespace abc 
+  def a : Nat := 5
+  def f' (x: Nat) : Nat := x + 7
+  def f'a : Nat := f' a 
+  def f'f'a : Nat := f' (f' a)  
+  -- #check f' -- : Nat → Nat
+end abc 
+-- #check f'  -- error
+-- #check abc.f' -- : Nat → Nat
+namespace abc -- namespace can be "reopened" but variables scope is only inside the namespace
+  def f2 (x: Nat) : Nat := f' (f' x)
+  end abc 
+/- Use open with namespace to include all the namespace and use short names
+open abc 
+#check f'
+#check f2
+open List
+#check map
+#check nil
+-/
