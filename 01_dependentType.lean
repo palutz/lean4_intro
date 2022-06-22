@@ -136,3 +136,31 @@ open List
 #check map
 #check nil
 -/
+/- *** Dependent types *** -/
+def cons (α : Type)(a : α)(as : List α): List α := List.cons a as
+/- so "cons α" has type α → List α → List α but cons has type (Type α) → α → List α → List α 
+This is an instance of *** dependent function type  or  dependent arrow type *** 
+with (α : Type) and (β : α → Type) β is a family of types over α (of type  β a  ∀  a : α).
+In this case ((a: α) → β) is a type of functions where (f a) is an element of (β a) ∀ (a : α) and only if (β : Type)
+If β doesn't depend on a then (a: α) → β is like (α → β) or ((a : α) → β)
+The explicit notation for dependent types is ((a: α) → β a) 
+-/
+#check @List.cons  -- @List.cons : {α : Type u_1} → α → List α → List α 
+/-
+Just as dependent function types (a : α) → β a generalize the notion of a function type α → β by allowing β to depend on α, 
+*** dependent Cartesian product types *** (a : α) × β a generalize the Cartesian product α × β in the same way
+-/
+namespace cartesian
+universe v w
+def f0 (α : Type v)(β : α → Type w)(a : α)(b : β a):(a : α)×(β a):= ⟨a,b⟩ 
+variable (α : Type v)
+variable (β : α → Type w)  -- depending on α 
+def f (a : α) (b : β a) : (a : α) × (β a) := ⟨a, b⟩  -- ⟨a, b⟩ is a dependent pair NOT a tuple (a, b)  
+-- same as 
+def f' (a: α) (b: β a) : (a : α) × (β a) := Sigma.mk a b
+-- or  
+def f'' (a: α) (b: β a) : Σ a : α, β a := ⟨a, b⟩ 
+
+#check (fun α => α)
+def h1 (x: Nat) : Nat := (f0 Type (fun α => α) Nat x).2
+end cartesian
