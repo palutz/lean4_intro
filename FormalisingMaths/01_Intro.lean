@@ -68,7 +68,13 @@ section Logic
     -- If `h : P → Q → R` with goal `⊢ R` and you `apply h`, you'll get
     -- two goals! Note that tactics operate on only the first goal.
     example : (P → Q → R) → (P → Q) → (P → R) := by
-      sorry
+      intro hPQR -- P → Q → R
+      intro hPQ  -- P → Q
+      intro hP   -- P ⊢ R
+      apply hPQR -- goal 1: R ⊢ P  
+      exact hP    
+      apply hPQ  -- goal 2: Q ⊢ P
+      exact hP
 
   end exercises
 end Logic
