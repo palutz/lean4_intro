@@ -77,4 +77,21 @@ section Logic
       exact hP
 
   end exercises
+
+  section hardOnes
+    variable (S T : Prop)
+
+    example : (P → R) → (S → Q) → (R → T) → (Q → R) → S → T := by
+      intro hPR 
+      intro hSQ
+      intro hRT
+      intro hQR 
+      intro hS 
+      apply hRT
+      apply hQR
+      apply hSQ
+      exact hS 
+  
+
+  end hardOnes
 end Logic
