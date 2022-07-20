@@ -91,6 +91,27 @@ section Logic
       apply hQR
       apply hSQ
       exact hS 
+
+    example : (P → Q) → ((P → Q) → P) → Q := by
+      intro hPQ
+      intro hPQP
+      apply hPQ
+
+
+    example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
+        sorry
+
+    example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
+        sorry
+
+    example : (((P → Q) → Q) → Q) → (P → Q) := by
+      sorry
+
+    example :
+      (((P → Q → Q) → ((P → Q) → Q)) → R) →
+      ((((P → P) → Q) → (P → P → Q)) → R) →
+      (((P → P → Q) → ((P → P) → Q)) → R) → R := by
+        sorry
   
 
   end hardOnes
