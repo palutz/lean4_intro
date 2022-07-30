@@ -96,13 +96,30 @@ section Logic
       intro hPQ
       intro hPQP
       apply hPQ
+      apply hPQP
+      exact hPQ
 
 
     example : ((P → Q) → R) → ((Q → R) → P) → ((R → P) → Q) → P := by
-        sorry
+      intro hPQR
+      intro hQRP
+      intro hRPQ
+      apply hQRP
+      intro hQ
+      apply hPQR
+      intro hP
+      apply hRPQ
+      intro hR
+      apply hP
 
     example : ((Q → P) → P) → (Q → R) → (R → P) → P := by
-        sorry
+      intro hQPP 
+      intro hQR
+      intro hPR
+      apply hQPP
+      intro hQ
+      apply 
+      
 
     example : (((P → Q) → Q) → Q) → (P → Q) := by
       sorry
