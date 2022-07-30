@@ -121,7 +121,7 @@ section Logic
       apply hRP 
       apply hQR
       apply hQ
-      
+
     example : (((P → Q) → Q) → Q) → (P → Q) := by
       intro hPQQQ
       intro hP 
