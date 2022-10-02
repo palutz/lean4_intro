@@ -123,8 +123,7 @@ section Logic
       apply hQ
 
     example : (((P → Q) → Q) → Q) → (P → Q) := by
-      intro hPQQQ
-      intro hP 
+      intros hPQQQ hP 
       apply hPQQQ
       intro hPQ
       apply hPQ
@@ -135,6 +134,10 @@ section Logic
       (((P → Q → Q) → ((P → Q) → Q)) → R) →
       ((((P → P) → Q) → (P → P → Q)) → R) →
       (((P → P → Q) → ((P → P) → Q)) → R) → R := by
+        intros hPQQ_PQQ_R PPQ_PPQ_R PPQ_PPQ_R₂
+        apply hPQQ_PQQ_R
+        intro hPQQ hPQ 
+        apply hPQ 
         sorry
 
   end hardOnes
