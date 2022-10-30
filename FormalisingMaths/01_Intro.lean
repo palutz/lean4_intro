@@ -46,6 +46,13 @@ section Logic
     intro q 
     exact r
 
+  -- lemma modus_pones
+  -- we assume P (p = true) and then we imply (P → Q)
+  example (pq: P → Q)(q : Q) : P → (P → Q) → Q := by
+    intro p
+    intro pq
+    exact q
+
 
 
 end Logic
